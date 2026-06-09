@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="../src/favicon.svg" type="image/svg+xml">
+<script>if(localStorage.getItem("bs-theme")==="dark")document.documentElement.classList.add("dark"),document.body&&document.body.classList.add("dark");</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BreatheSafe — Analytics</title>
+  <script src="../js/theme.js"></script>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/analytics.css">
+</head>
+<body>
+
+  <div class="particles">
+    <div class="particle one"></div>
+    <div class="particle two"></div>
+    <div class="particle three"></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a class="nav-logo" href="dashboard.html" style="text-decoration:none;">BreatheSafe</a>
+    <div class="nav-links" style="display:flex;align-items:center;gap:20px;">
+      <a class="nav-app-link" href="dashboard.html">Dashboard</a>
+      <a class="nav-app-link" href="saferoute.html">SafeRoute</a>
+      <a class="nav-app-link" href="symptoms.html">Symptoms</a>
+      <a class="nav-app-link" href="analytics.html" style="color:var(--or);font-weight:600;">Analytics</a>
+      <a class="nav-app-link" href="helpzone.html">HelpZone</a>
+    </div>
+    <div class="nav-right">
+      <div class="range-btns">
+        <button class="range-btn active" data-days="7">7d</button>
+        <button class="range-btn" data-days="30">30d</button>
+        <button class="range-btn" data-days="0">All</button>
+      </div>
+      <button class="theme-toggle" id="themeBtn">☀️</button>
+      <div class="avatar" id="avatar">?</div>
+    </div>
+  </nav>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <span class="empty-icon">📋</span>
+    <h2 class="empty-title">No logs yet</h2>
+    <p class="empty-sub">Start logging your symptoms daily and your patterns will appear here.</p>
+    <button class="btn-primary" onclick="location.href='symptoms.html'">Log Today's Symptoms</button>
+  </div>
+
+  <!-- MAIN -->
+  <main class="an-wrap" id="analyticsWrap">
+
+    <!-- STAT STRIP -->
+    <div class="an-stats" id="anStats">
+      <div class="an-stat">
+        <div class="an-stat-val" id="st-comfort">—</div>
+        <div class="an-stat-lbl">Avg Comfort</div>
+      </div>
+      <div class="an-stat-div"></div>
+      <div class="an-stat">
+        <div class="an-stat-val" id="st-days">—</div>
+        <div class="an-stat-lbl">Days Logged</div>
+      </div>
+      <div class="an-stat-div"></div>
+      <div class="an-stat">
+        <div class="an-stat-val" id="st-symptom">—</div>
+        <div class="an-stat-lbl">Top Symptom</div>
+      </div>
+      <div class="an-stat-div"></div>
+      <div class="an-stat">
+        <div class="an-stat-val" id="st-trigger">—</div>
+        <div class="an-stat-lbl">Top Trigger</div>
+      </div>
+      <div class="an-stat-div"></div>
+      <div class="an-stat">
+        <div class="an-stat-val" id="st-episodes">—</div>
+        <div class="an-stat-lbl">Episodes</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="an-charts">
+
+      <!-- SYMPTOM PROGRESSION -->
+      <div class="an-card" id="symptomCard">
+        <div class="an-card-header">
+          <div>
+            <div class="an-eyebrow">Breathing Comfort</div>
+            <div class="an-card-title">How you've been feeling</div>
+          </div>
+          <div class="an-card-stat" id="totalLogs">—</div>
+        </div>
+        <div class="an-card-body" id="symptomChart"></div>
+        <div class="an-prog-legend" id="progLegend"></div>
+        <div class="an-card-footer" id="symptomDetail"></div>
+      </div>
+
+      <!-- STREAK TRACKER -->
+      <div class="an-card" id="streakCard">
+        <div class="an-card-header">
+          <div>
+            <div class="an-eyebrow">Logging Streak</div>
+            <div class="an-card-title">Your consistency</div>
+          </div>
+          <div class="an-streak-current" id="st-current-streak">—</div>
+        </div>
+        <div class="an-streak-body">
+          <div class="an-streak-stats">
+            <div class="an-streak-item">
+              <div class="an-streak-val" id="st-best-streak">—</div>
+              <div class="an-streak-lbl">Best streak</div>
+            </div>
+            <div class="an-streak-item">
+              <div class="an-streak-val" id="st-total-days">—</div>
+              <div class="an-streak-lbl">Total days</div>
+            </div>
+            <div class="an-streak-item">
+              <div class="an-streak-val" id="st-this-week">—</div>
+              <div class="an-streak-lbl">This week</div>
+            </div>
+          </div>
+          <div id="streakDots" style="display:flex;flex-direction:column;gap:4px;flex:1;min-height:0;width:100%;"></div>
+          <div class="an-streak-footer" id="streakFooter"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="../js/analytics.js"></script>
+
+
+  <div class="nav-mobile-menu" id="navMobileMenu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="saferoute.html">SafeRoute</a>
+    <a href="symptoms.html">Symptoms</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="helpzone.html">HelpZone</a>
+  </div>
+  <script>
+    (function(){
+      const btn  = document.getElementById('navHamburger');
+      const menu = document.getElementById('navMobileMenu');
+      if (!btn || !menu) return;
+      const page = location.pathname.split('/').pop();
+      menu.querySelectorAll('a').forEach(a => {
+        if (a.getAttribute('href') === page) a.classList.add('active');
+      });
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('open');
+        menu.classList.toggle('open');
+      });
+      document.addEventListener('click', e => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+          btn.classList.remove('open');
+          menu.classList.remove('open');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
